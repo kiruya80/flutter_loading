@@ -29,12 +29,14 @@ class _ThirdPageState extends State<ThirdPage> {
   void initState() {
     super.initState();
     // final bool isLoading = ModalRoute.of(context)?.settings.arguments as bool;
-    QcLog.d('initState 11===   ${widget.isLoading} , ${LoadingDialog().context.toString()}');
+    QcLog.d('initState 11===  ${context.widget} / ${widget.isLoading} , ${LoadingDialog().context.toString()}');
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      LoadingDialog().clear();
-      if (widget.isLoading == true) {
-        LoadingDialog().show(context);
-      }
+      // final currentRoute = ModalRoute.of(context!);
+      // QcLog.i('Current Route: ${currentRoute?.settings.name} , ${currentRoute.toString()}');
+      // LoadingDialog().clear();
+      // if (widget.isLoading == true) {
+      //   LoadingDialog().show(context);
+      // }
       // await Future.delayed(const Duration(seconds: 5));
       // setState(() async {
       //   LoadingOverlay.hide();
@@ -72,10 +74,7 @@ class _ThirdPageState extends State<ThirdPage> {
             const SizedBox(height: 50,),
             ElevatedButton(
               onPressed: () async {
-                LoadingDialog().clear();
-                // if (widget.isLoading == true) {
-                //   LoadingDialog().show(context);
-                // }
+                LoadingDialog().clear(closeContext: context);
               },
               child: Text("로딩 이미지 clear "),
             ),

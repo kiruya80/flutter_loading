@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_dialog/page/third_page.dart';
 
 import '../loading_dialog.dart';
-
+import '../util/print_log.dart';
 
 ///
 /// 생성일 : 2024. 11. 11.
@@ -28,7 +28,14 @@ class _LoadingDialogPageState extends State<LoadingDialogPage> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/ThirdPage');
+              // Navigator.pushNamed(context, '/ThirdPage');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(
+                            isLoading: isMoveLoading,
+                          ),
+                      settings: RouteSettings(name: 'ThirdPage')));
             },
             child: Text("Navigator.pushNamed Third Page"),
           ),
@@ -76,7 +83,7 @@ class _LoadingDialogPageState extends State<LoadingDialogPage> {
             onPressed: () async {
               LoadingDialog().show(context, isCanPop: isCanPop);
               await Future.delayed(const Duration(seconds: 5));
-              LoadingDialog().hide(closeContext: context);
+              // LoadingDialog().hide(closeContext: context);
               // Navigator.pushNamed(context, '/ThirdPage', arguments: isCanPop);
 
               Navigator.push(
@@ -84,7 +91,12 @@ class _LoadingDialogPageState extends State<LoadingDialogPage> {
                   MaterialPageRoute(
                       builder: (context) => ThirdPage(
                             isLoading: isMoveLoading,
-                          )));
+                          ),
+                      settings: RouteSettings(name: 'ThirdPage')));
+              // await Future.delayed(const Duration(seconds: 5));
+              // QcLog.i('ElevatedButton mounted === ${context?.mounted}, ${context.owner.toString()} ,'
+              //     '${context.widget.toString()}');
+              // LoadingDialog().hide(closeContext: context);
             },
             child: Text("${isCanPop ? "백키 가능" : "백키 불가"} , 로딩 5초 후 ThirdPage 이동"),
           ),

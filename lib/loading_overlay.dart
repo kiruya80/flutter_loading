@@ -34,7 +34,9 @@ class LoadingOverlay {
       builder: (context) => PopScope(
         canPop: false,
         onPopInvokedWithResult: (bool didPop, Object? result) async {
-          QcLog.i('showOverlay onPopInvokedWithResult === $isCanPop , $didPop');
+          QcLog.e(
+              'onPopInvokedWithResult showOverlay ==== didPop : $didPop , result : ${result.toString()} , isCanPop : $isCanPop');
+
           if (isCanPop) {
             // SystemNavigator.pop();
             hide();
