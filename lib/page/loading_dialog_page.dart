@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_dialog/page/third_page.dart';
 
+import '../base/base_state.dart';
+import '../base/state_navigator.dart';
 import '../loading_dialog.dart';
+import '../navigator/navigator_observer_notifier.dart';
 import '../util/print_log.dart';
 
 ///
@@ -11,31 +15,49 @@ import '../util/print_log.dart';
 ///
 ///
 
-class LoadingDialogPage extends StatefulWidget {
+class LoadingDialogPage extends ConsumerStatefulWidget {
   @override
-  State<LoadingDialogPage> createState() => _LoadingDialogPageState();
+  ConsumerState<LoadingDialogPage> createState() => _LoadingDialogPageState();
 }
 
-class _LoadingDialogPageState extends State<LoadingDialogPage> {
+class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
   bool isCanPop = false;
   bool isMoveLoading = false;
 
   @override
+  void readyWidget() {
+    // TODO: implement readyWidget
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // final navigatorObserver = ref.watch(navigatorObserverNotifier);
+    // QcLog.d('LoadingDialogPage ===  ${navigatorObserver.routeStack.toString()}');
+    // QcLog.d('routeStack length ===  ${navigatorObserver.routeStack.length}');
+
     return Scaffold(
       appBar: AppBar(title: Text("LoadingDialogPage")),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+              'route : ${currentRoute?.settings.name} [${routeStack.length}'
+          ),
+          Text(
+              'tempRouteList : ${tempRouteList}'
+          ),
+          const SizedBox(height: 10,),
           ElevatedButton(
             onPressed: () {
-              // Navigator.pushNamed(context, '/ThirdPage');
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ThirdPage(
-                            isLoading: isMoveLoading,
-                          ),
-                      settings: RouteSettings(name: 'ThirdPage')));
+              Navigator.pushNamed(context, '/ThirdPage');
+              // Navigator.popAndPushNamed(context, '/ThirdPage');
+
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => ThirdPage(
+              //               isLoading: isMoveLoading,
+              //             ),
+              //         settings: RouteSettings(name: 'ThirdPage')));
             },
             child: Text("Navigator.pushNamed Third Page"),
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../base/base_state.dart';
 import '../loading_overlay.dart';
 import '../util/print_log.dart';
 
@@ -9,14 +11,19 @@ import '../util/print_log.dart';
 /// class 설명
 ///
 ///
-class LoadingOverlayPage extends StatefulWidget {
+class LoadingOverlayPage extends ConsumerStatefulWidget {
   @override
-  State<LoadingOverlayPage> createState() => _LoadingOverlayPageState();
+  ConsumerState<LoadingOverlayPage> createState() => _LoadingOverlayPageState();
 }
 
-class _LoadingOverlayPageState extends State<LoadingOverlayPage> {
+class _LoadingOverlayPageState extends BaseState<LoadingOverlayPage> {
   bool isCanPop = false;
 
+
+  @override
+  void readyWidget() {
+    // TODO: implement readyWidget
+  }
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -46,7 +53,17 @@ class _LoadingOverlayPageState extends State<LoadingOverlayPage> {
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/ThirdPage');
+                // Navigator.pushNamed(context, '/ThirdPage');
+                Navigator.pushReplacementNamed(context, '/ThirdPage');
+
+                // Navigator.replace(
+                //     context,
+                //     this,
+                //     MaterialPageRoute(
+                //         builder: (context) => ThirdPage(
+                //               isLoading: isMoveLoading,
+                //             ),
+                //         settings: RouteSettings(name: 'ThirdPage')));
               },
               child: Text("Navigator.pushNamed Third Page"),
             ),

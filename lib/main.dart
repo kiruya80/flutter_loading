@@ -1,33 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_dialog/page/loading_dialog_page.dart';
 import 'package:loading_dialog/page/loading_overlay_page.dart';
+import 'package:loading_dialog/page/notifier_first_page.dart';
+import 'package:loading_dialog/page/notifier_second_page.dart';
 import 'package:loading_dialog/page/third_page.dart';
-import 'package:loading_dialog/util/print_log.dart';
 
-import 'my_navigator_observer.dart';
+import 'navigator/navigator_observer_notifier.dart';
+import 'over_app.dart';
 import 'page/fourth_page.dart';
 
+Map<String, WidgetBuilder> routes = {
+  '/': (context) => HomePage(),
+  '/LoadingDialogPage': (context) => LoadingDialogPage(),
+  '/LoadingOverlayPage': (context) => LoadingOverlayPage(),
+  '/ThirdPage': (context) => ThirdPage(),
+  '/FourthPage': (context) => FourthPage(),
+
+  '/NotifierFirstPage': (context) => NotifierFirstPage(),
+  '/NotifierSecondPage': (context) => NotifierSecondPage(),
+};
+
 void main() {
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
+  // runApp(ProviderScope(child: SampleRouteObserverRiverpod()));
   // runApp(OverApp());
 }
 
-var route = MaterialPageRoute(builder: (context) => LoadingDialogPage());
+// var route = MaterialPageRoute(builder: (context) => LoadingDialogPage());
 
-class MyApp extends StatelessWidget {
-  final MyNavigatorObserver myObserver = MyNavigatorObserver();
+class MyApp extends ConsumerWidget {
+  // final MyNavigatorObserver myObserver = MyNavigatorObserver();
+  // final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // final navigatorObserver = ref.watch(myNavigatorObserverProvider);
+    // QcLog.d('MyApp ===  ${navigatorObserver.toString()}');
+
+    // final navigatorObserver = ref.watch(navigatorObserverNotifier);
+    // QcLog.d('LoadingDialogPage ===  ${navigatorObserver.routeStack.toString()}');
+    // QcLog.d('routeStack length ===  ${navigatorObserver.routeStack.length}');
+
+    // final navigatorChangeObserver = ref.watch(myNavigatorObserverChangeProvider);
+    // QcLog.d('MyApp ===  ${navigatorChangeObserver.toString()}');
+
+    // final routeObserver = ref.watch(routeObserverProvider);
+
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: '/',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [myObserver],
+      // navigatorObservers: [myObserver],
+      // navigatorObservers: [navigatorObserver],
+      navigatorObservers: [ref.watch(navigatorObserverNotifier)],
+      routes: routes,
       // 옵저버 등록
-      home: HomePage(),
+      // home: HomePage(),
     );
 
     // return MaterialApp(
@@ -49,67 +82,5 @@ class MyApp extends StatelessWidget {
     // );
     // return MaterialApp.router(
     // );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  // 구독자 1
-
-  @override
-  Widget build(BuildContext context) {
-    final myObserver = (context.findAncestorWidgetOfExactType<MyApp>() as MyApp).myObserver;
-
-    myObserver.currentPathStream.listen((v) {
-      QcLog.d('currentPathStream ===== [${v.length}] ,  $v , ');
-
-      // final currentRoute = ModalRoute.of(context);
-      // QcLog.i('Current Route: ${currentRoute?.settings.name} , ${currentRoute.toString()}');
-
-    });
-    myObserver.routeStackStream.listen((v) {
-      QcLog.d('routeStackStream =====  [${v.length}] , $v ');
-
-      // final currentRoute = ModalRoute.of(context);
-      // QcLog.i('Current Route: ${currentRoute?.settings.name} , ${currentRoute.toString()}');
-
-    });
-    return Scaffold(
-      appBar: AppBar(title: Text("Home Page")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                // Navigator.pushNamed(context, '/LoadingDialogPage');
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoadingDialogPage(),
-                        settings: RouteSettings(name: 'LoadingDialogPage')));
-              },
-              child: const Text("다이얼로그 로딩 페이지"),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigator.pushNamed(context, '/LoadingOverlayPage');
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LoadingOverlayPage(),
-                        settings: RouteSettings(name: 'LoadingOverlayPage')));
-              },
-              child: const Text("Overlay 로딩 페이지"),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

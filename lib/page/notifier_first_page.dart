@@ -4,7 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../base/base_state.dart';
 import '../base/state_navigator.dart';
+import '../base/state_route_notifier.dart';
 import '../loading_dialog.dart';
+import '../provider/app_current_route_notifier.dart';
+import '../provider/app_route_stack_notifier.dart';
 import '../util/print_log.dart';
 import 'fourth_page.dart';
 
@@ -14,23 +17,19 @@ import 'fourth_page.dart';
 ///
 ///
 
-class ThirdPage extends ConsumerStatefulWidget {
+class NotifierFirstPage extends ConsumerStatefulWidget {
   final bool? isLoading;
 
-  const ThirdPage({super.key, this.isLoading = false});
-
-  // const ThirdPage({super.key});
+  const NotifierFirstPage({super.key, this.isLoading = false});
 
   @override
-  ConsumerState<ThirdPage> createState() => _ThirdPageState();
+  ConsumerState<NotifierFirstPage> createState() => _NotifierFirstPageState();
 }
 
 ///
 ///
 ///
-class _ThirdPageState extends StateNavigator<ThirdPage> {
-
-
+class _NotifierFirstPageState extends StateRouteNotifier<NotifierFirstPage> {
   @override
   void readyWidget() {
     // TODO: implement readyWidget
@@ -39,22 +38,27 @@ class _ThirdPageState extends StateNavigator<ThirdPage> {
   @override
   Widget build(BuildContext context) {
     print('build === ');
+
+    var appCurrentRouteNotifier = ref.watch(appCurrentRouteNotifierProvider);
+    var appRouteStackNotifier = ref.watch(appRouteStackNotifierProvider);
+
+    QcLog.d('appCurrentRouteNotifier ==== ${appCurrentRouteNotifier?.settings.name}');
+    QcLog.d('appRouteStackNotifier ==== ${appRouteStackNotifier?.length}');
+
     return Scaffold(
-      appBar: AppBar(title: Text("Third Page")),
+      appBar: AppBar(title: Text("Notifier First Page")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-                'route : ${currentRoute?.settings.name} [${routeStack.length}'
+            Text('route : ${currentRoute?.settings.name} [${routeStack.length}'),
+            Text('tempRouteList : ${tempRouteList}'),
+            const SizedBox(
+              height: 10,
             ),
-            Text(
-                'tempRouteList : ${tempRouteList}'
-            ),
-            const SizedBox(height: 10,),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/FourthPage');
+                Navigator.pushNamed(context, '/NotifierSecondPage');
 
                 // Navigator.push(
                 //     context,

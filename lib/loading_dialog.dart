@@ -20,6 +20,13 @@ class LoadingDialog {
   LoadingDialog._internal();
 
   void show(BuildContext context, {bool isCanPop = false}) {
+    if (this.context != null &&
+        this.context?.mounted == true &&
+        this.context?.widget == context.widget) {
+      QcLog.d('Dialog show ====');
+      return;
+    }
+
     _loadingDialog(context, isCanPop: isCanPop);
   }
 
@@ -59,8 +66,7 @@ class LoadingDialog {
 
       Navigator.of(context!).removeRoute(
           // ModalRoute.of(context!)!.previous!,
-          route );
-
+          route);
     }
     context = null;
   }
