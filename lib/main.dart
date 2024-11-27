@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_dialog/page/loading_dialog_page.dart';
-import 'package:loading_dialog/page/loading_overlay_page.dart';
-import 'package:loading_dialog/page/notifier_first_page.dart';
-import 'package:loading_dialog/page/notifier_second_page.dart';
-import 'package:loading_dialog/page/third_page.dart';
+import 'package:loading_dialog/page/flutter/loading_dialog_page.dart';
+import 'package:loading_dialog/page/home_page.dart';
+import 'package:loading_dialog/page/riverpod/fourth_consumer_page.dart';
+import 'package:loading_dialog/page/riverpod/loading_consumer_dialog_page.dart';
+import 'package:loading_dialog/page/riverpod/loading_overlay_page.dart';
+import 'package:loading_dialog/page/riverpod/notifier_first_page.dart';
+import 'package:loading_dialog/page/riverpod/notifier_second_page.dart';
+import 'package:loading_dialog/page/flutter/third_page.dart';
+import 'package:loading_dialog/page/riverpod/third_consumer_page.dart';
 
-import 'navigator/navigator_observer_notifier.dart';
-import 'over_app.dart';
-import 'page/fourth_page.dart';
+import 'navigator/navigator_stream_observer.dart';
+import 'page/flutter/fourth_page.dart';
 
 Map<String, WidgetBuilder> routes = {
   '/': (context) => HomePage(),
   '/LoadingDialogPage': (context) => LoadingDialogPage(),
-  '/LoadingOverlayPage': (context) => LoadingOverlayPage(),
   '/ThirdPage': (context) => ThirdPage(),
   '/FourthPage': (context) => FourthPage(),
-
+  '/LoadingConsumerDialogPage': (context) => LoadingConsumerDialogPage(),
+  '/ThirdConsumerPage': (context) => ThirdConsumerPage(),
+  '/FourthConsumerPage': (context) => FourthConsumerPage(),
+  '/LoadingOverlayPage': (context) => LoadingOverlayPage(),
   '/NotifierFirstPage': (context) => NotifierFirstPage(),
   '/NotifierSecondPage': (context) => NotifierSecondPage(),
 };
@@ -28,25 +33,38 @@ void main() {
   // runApp(OverApp());
 }
 
+// myObserver = (context.findAncestorWidgetOfExactType<MyApp>() as MyApp).myObserver;
 // var route = MaterialPageRoute(builder: (context) => LoadingDialogPage());
 
 class MyApp extends ConsumerWidget {
-  // final MyNavigatorObserver myObserver = MyNavigatorObserver();
+  final NavigatorStreamObserver streamObserver = NavigatorStreamObserver();
+  final RouteObserver routeObserver = RouteObserver();
+
   // final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
+  // NavigatorObserverNotifier navigatorObserver = NavigatorObserverNotifier();
+  // AutoRouteObserver aRouteObserver = AutoRouteObserver();
+
+  /**
+   *
+      // final navigatorObserver = ref.watch(myNavigatorObserverProvider);
+      // QcLog.d('MyApp ===  ${navigatorObserver.toString()}');
+
+      // final navigatorObserver = ref.watch(navigatorObserverNotifier);
+
+      // final navigatorChangeObserver = ref.watch(myNavigatorObserverChangeProvider);
+      // QcLog.d('MyApp ===  ${navigatorChangeObserver.toString()}');
+
+      // final routeObserver = ref.watch(routeObserverProvider);
+   */
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final navigatorObserver = ref.watch(myNavigatorObserverProvider);
-    // QcLog.d('MyApp ===  ${navigatorObserver.toString()}');
-
+    // 1.
+    // navigatorObserver.addListener((){
+    //   QcLog.d('navigatorObserver ==== ${navigatorObserver.currentRoute.toString()}');
+    // });
+    // 2.
     // final navigatorObserver = ref.watch(navigatorObserverNotifier);
-    // QcLog.d('LoadingDialogPage ===  ${navigatorObserver.routeStack.toString()}');
-    // QcLog.d('routeStack length ===  ${navigatorObserver.routeStack.length}');
-
-    // final navigatorChangeObserver = ref.watch(myNavigatorObserverChangeProvider);
-    // QcLog.d('MyApp ===  ${navigatorChangeObserver.toString()}');
-
-    // final routeObserver = ref.watch(routeObserverProvider);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -55,9 +73,10 @@ class MyApp extends ConsumerWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      // navigatorObservers: [myObserver],
+      navigatorObservers: [streamObserver, routeObserver],
+      // navigatorObservers: [RouteObserver()],
       // navigatorObservers: [navigatorObserver],
-      navigatorObservers: [ref.watch(navigatorObserverNotifier)],
+      // navigatorObservers: [ref.watch(navigatorObserverNotifier)],
       routes: routes,
       // 옵저버 등록
       // home: HomePage(),

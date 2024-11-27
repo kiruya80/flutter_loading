@@ -1,10 +1,4 @@
-///
-/// 생성일 : 2024. 11. 8.
-/// class 설명
-///
-///
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:loading_dialog/util/print_log.dart';
 
 ///
@@ -166,7 +160,8 @@ class DismissibleOverlay extends StatelessWidget {
   final Widget child;
   final OverlayEntry? overlayEntry;
 
-  const DismissibleOverlay({Key? key, required this.child, required this.overlayEntry})
+  const DismissibleOverlay(
+      {Key? key, required this.child, required this.overlayEntry})
       : super(key: key);
 
   @override

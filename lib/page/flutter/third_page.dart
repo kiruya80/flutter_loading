@@ -1,12 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../base/base_state.dart';
-import '../base/state_navigator.dart';
-import '../loading_dialog.dart';
-import '../util/print_log.dart';
-import 'fourth_page.dart';
+import '../../base/route/route_state.dart';
 
 ///
 /// 생성일 : 2024. 11. 11.
@@ -14,26 +9,20 @@ import 'fourth_page.dart';
 ///
 ///
 
-class ThirdPage extends ConsumerStatefulWidget {
+class ThirdPage extends StatefulWidget {
   final bool? isLoading;
 
   const ThirdPage({super.key, this.isLoading = false});
 
-  // const ThirdPage({super.key});
-
   @override
-  ConsumerState<ThirdPage> createState() => _ThirdPageState();
+  State<ThirdPage> createState() => _ThirdPageState();
 }
 
-///
-///
-///
-class _ThirdPageState extends StateNavigator<ThirdPage> {
-
-
+class _ThirdPageState extends RouteState<ThirdPage> {
   @override
-  void readyWidget() {
-    // TODO: implement readyWidget
+  Future<void> readyWidget() async {
+    // await Future.delayed(const Duration(seconds: 5));
+    // LoadingDialog().clear(closeContext: context);
   }
 
   @override
@@ -45,22 +34,12 @@ class _ThirdPageState extends StateNavigator<ThirdPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-                'route : ${currentRoute?.settings.name} [${routeStack.length}'
+            const SizedBox(
+              height: 10,
             ),
-            Text(
-                'tempRouteList : ${tempRouteList}'
-            ),
-            const SizedBox(height: 10,),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/FourthPage');
-
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => FourthPage(),
-                //         settings: RouteSettings(name: '/FourthPage')));
               },
               child: Text("Go to Fourth Page"),
             ),

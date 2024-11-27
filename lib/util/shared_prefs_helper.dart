@@ -50,7 +50,8 @@ class SharedPrefsHelper {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  List<String> getStringList(String key, {List<String> defaultValue = const []}) {
+  List<String> getStringList(String key,
+      {List<String> defaultValue = const []}) {
     return _prefs.getStringList(key) ?? defaultValue;
   }
 

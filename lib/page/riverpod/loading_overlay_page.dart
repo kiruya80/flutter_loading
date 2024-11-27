@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../base/base_state.dart';
-import '../loading_overlay.dart';
-import '../util/print_log.dart';
+import '../../base/route/route_consumer_state.dart';
+import '../../loading_overlay.dart';
+import '../../util/print_log.dart';
 
 ///
 /// 생성일 : 2024. 11. 11.
@@ -16,9 +16,8 @@ class LoadingOverlayPage extends ConsumerStatefulWidget {
   ConsumerState<LoadingOverlayPage> createState() => _LoadingOverlayPageState();
 }
 
-class _LoadingOverlayPageState extends BaseState<LoadingOverlayPage> {
+class _LoadingOverlayPageState extends RouteConsumerState<LoadingOverlayPage> {
   bool isCanPop = false;
-
 
   @override
   void readyWidget() {
@@ -29,7 +28,8 @@ class _LoadingOverlayPageState extends BaseState<LoadingOverlayPage> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {
-        QcLog.e('onPopInvokedWithResult fullscreen ====  $didPop , ${result.toString()} '
+        QcLog.e(
+            'onPopInvokedWithResult fullscreen ====  $didPop , ${result.toString()} '
             '/ isCanPop: ${LoadingOverlay().isLoading()} , isLoading:  ${LoadingOverlay().isLoading()}');
         if (didPop) {
           return;
@@ -48,7 +48,7 @@ class _LoadingOverlayPageState extends BaseState<LoadingOverlayPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text("LoadingOverlayPage")),
+        appBar: AppBar(title: Text("Loading Overlay Consumer Page")),
         body: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevatedButton(
@@ -108,7 +108,8 @@ class _LoadingOverlayPageState extends BaseState<LoadingOverlayPage> {
                 //           isLoading: isMoveLoading,
                 //         )));
               },
-              child: Text("${isCanPop ? "백키 가능" : "백키 불가"} , 로딩 5초 후 ThirdPage 이동"),
+              child: Text(
+                  "${isCanPop ? "백키 가능" : "백키 불가"} , 로딩 5초 후 ThirdPage 이동"),
             ),
           ]),
         ),

@@ -2,14 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../base/base_state.dart';
-import '../base/state_navigator.dart';
-import '../base/state_route_notifier.dart';
-import '../loading_dialog.dart';
-import '../provider/app_current_route_notifier.dart';
-import '../provider/app_route_stack_notifier.dart';
-import '../util/print_log.dart';
-import 'fourth_page.dart';
+import '../../base/navigator/state_route_notifier.dart';
+import '../../provider/app_current_route_notifier.dart';
+import '../../provider/app_route_stack_notifier.dart';
+import '../../util/print_log.dart';
 
 ///
 /// 생성일 : 2024. 11. 11.
@@ -42,16 +38,18 @@ class _NotifierFirstPageState extends StateRouteNotifier<NotifierFirstPage> {
     var appCurrentRouteNotifier = ref.watch(appCurrentRouteNotifierProvider);
     var appRouteStackNotifier = ref.watch(appRouteStackNotifierProvider);
 
-    QcLog.d('appCurrentRouteNotifier ==== ${appCurrentRouteNotifier?.settings.name}');
+    QcLog.d(
+        'appCurrentRouteNotifier ==== ${appCurrentRouteNotifier?.settings.name}');
     QcLog.d('appRouteStackNotifier ==== ${appRouteStackNotifier?.length}');
 
     return Scaffold(
-      appBar: AppBar(title: Text("Notifier First Page")),
+      appBar: AppBar(title: Text("Notifier Consumer First Page")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('route : ${currentRoute?.settings.name} [${routeStack.length}'),
+            Text(
+                'route : ${currentRoute?.settings.name} [${routeStack.length}'),
             Text('tempRouteList : ${tempRouteList}'),
             const SizedBox(
               height: 10,

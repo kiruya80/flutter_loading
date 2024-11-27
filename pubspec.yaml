@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   logger: ^2.3.0
   shared_preferences: ^2.3.3
-  provider:
+  provider: ^6.1.2
   flutter_riverpod: ^2.6.1
   # App추가 / 상태관리기능 / MIT / https://github.com/rrousselGit/riverpod
   riverpod_annotation: ^2.6.1

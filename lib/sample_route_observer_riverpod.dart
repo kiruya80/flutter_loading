@@ -1,8 +1,3 @@
-///
-/// 생성일 : 2024. 11. 15.
-/// class 설명
-///
-///
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_dialog/util/print_log.dart';
@@ -52,7 +47,8 @@ class RouteAwareNotifier extends StateNotifier<String?> with RouteAware {
   }
 }
 
-final routeAwareProvider = StateNotifierProvider<RouteAwareNotifier, String?>((ref) {
+final routeAwareProvider =
+    StateNotifierProvider<RouteAwareNotifier, String?>((ref) {
   final routeObserver = ref.watch(routeObserverProvider);
   return RouteAwareNotifier(routeObserver);
 });
@@ -159,7 +155,6 @@ class ThirdScreen extends ConsumerWidget {
       ),
     );
   }
-
 
   @override
   void didChangeDependencies(BuildContext context, WidgetRef ref) {

@@ -1,13 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:loading_dialog/page/third_page.dart';
+import 'package:loading_dialog/page/flutter/third_page.dart';
 
-import '../base/base_state.dart';
-import '../base/state_navigator.dart';
-import '../loading_dialog.dart';
-import '../navigator/navigator_observer_notifier.dart';
-import '../util/print_log.dart';
+import '../../base/route/route_state.dart';
+import '../../loading_dialog.dart';
 
 ///
 /// 생성일 : 2024. 11. 11.
@@ -15,12 +11,12 @@ import '../util/print_log.dart';
 ///
 ///
 
-class LoadingDialogPage extends ConsumerStatefulWidget {
+class LoadingDialogPage extends StatefulWidget {
   @override
-  ConsumerState<LoadingDialogPage> createState() => _LoadingDialogPageState();
+  State<LoadingDialogPage> createState() => _LoadingDialogPageState();
 }
 
-class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
+class _LoadingDialogPageState extends RouteState<LoadingDialogPage> {
   bool isCanPop = false;
   bool isMoveLoading = false;
 
@@ -36,16 +32,25 @@ class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
     // QcLog.d('routeStack length ===  ${navigatorObserver.routeStack.length}');
 
     return Scaffold(
-      appBar: AppBar(title: Text("LoadingDialogPage")),
-      body: Center(
+      appBar: AppBar(title: Text("Loading Dialog Page")),
+      body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Text(
-              'route : ${currentRoute?.settings.name} [${routeStack.length}'
+          // Text(
+          //     'route : ${currentRoute?.settings.name} [${routeStack.length}'
+          // ),
+          // Text(
+          //     'tempRouteList : ${tempRouteList}'
+          // ),
+          const SizedBox(
+            height: 10,
           ),
-          Text(
-              'tempRouteList : ${tempRouteList}'
+          const Padding(
+            padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+            child: TextField(),
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           ElevatedButton(
             onPressed: () {
               Navigator.pushNamed(context, '/ThirdPage');
@@ -120,7 +125,8 @@ class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
               //     '${context.widget.toString()}');
               // LoadingDialog().hide(closeContext: context);
             },
-            child: Text("${isCanPop ? "백키 가능" : "백키 불가"} , 로딩 5초 후 ThirdPage 이동"),
+            child:
+                Text("${isCanPop ? "백키 가능" : "백키 불가"} , 로딩 5초 후 ThirdPage 이동"),
           ),
 
           const SizedBox(
@@ -157,8 +163,8 @@ class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
                   ' ${currentRouteModal?.settings.toString()}');
 
               // 최상위 네비게이터의 정보 가져오기
-              final currentRoute =
-                  ModalRoute.of(Navigator.of(context, rootNavigator: true).context);
+              final currentRoute = ModalRoute.of(
+                  Navigator.of(context, rootNavigator: true).context);
               print('Current Route: ${currentRoute?.settings.name} /'
                   ' ${currentRoute?.isCurrent} /'
                   ' ${currentRoute?.isActive} / '
@@ -169,7 +175,9 @@ class _LoadingDialogPageState extends StateNavigator<LoadingDialogPage> {
               if (route != null && route is DialogRoute) {
                 final settings = route.settings;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Route name: ${settings.name ?? 'Unnamed'}")),
+                  SnackBar(
+                      content:
+                          Text("Route name: ${settings.name ?? 'Unnamed'}")),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -210,7 +218,9 @@ class CustomDialog extends StatelessWidget {
               if (route != null && route is DialogRoute) {
                 final settings = route.settings;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Route name: ${settings.name ?? 'Unnamed'}")),
+                  SnackBar(
+                      content:
+                          Text("Route name: ${settings.name ?? 'Unnamed'}")),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(

@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_dialog/util/print_log.dart';
 
 ///
@@ -10,22 +7,31 @@ import 'package:loading_dialog/util/print_log.dart';
 ///
 /// route 옵져버
 ///
+/// 참고
+/// https://medium.com/@atefelsaid3/mastering-navigation-tracking-in-flutter-a-complete-guide-to-routeobserver-with-riverpod-ea23a12fb80c
 ///
+/// 1. MainApp
 ///
-// 현재 활성화된 라우트 이름을 저장하는 StateProvider
-final currentRouteProvider = StateProvider<String?>((ref) => null);
-
-final appNavigatorObserver = Provider<NavigatorObserver>((ref) {
-  QcLog.e('AppNavigatorObserver Provider === ');
-  return AppNavigatorObserver(ref as WidgetRef);
-});
-
-class AppNavigatorObserver extends NavigatorObserver {
-
-  final WidgetRef ref;
-
-  AppNavigatorObserver(this.ref);
-
+///  NavigatorObserverNotifier navigatorObserver = NavigatorObserverNotifier();
+///
+/// widget에서
+///  var myObserver = (context.findAncestorWidgetOfExactType<MyApp>() as MyApp).navigatorObserver;
+///       myObserver.addListener((){
+///         QcLog.d('myObserver ==== ${myObserver.currentRoute.toString()}');
+///       });
+///
+/// 2. ChangeNotifierProvider
+///  navigatorObserver = ref.watch(navigatorObserverNotifier);
+///
+class NavigatorObserverNotifier extends NavigatorObserver with ChangeNotifier {
+  // final List<int> _values = <int>[];
+  //
+  // List<int> get values => _values.toList();
+  //
+  // void add(int value) {
+  //   _values.add(value);
+  //   notifyListeners();
+  // }
 
   List<Route> routeStack = [];
   Route? currentRoute;
@@ -44,6 +50,8 @@ class AppNavigatorObserver extends NavigatorObserver {
     QcLog.i("""[Push 정보 (route stack : $oldStack > ${routeStack.length})]
         이전 라우트: ${previousRoute?.settings.name}
         >> [현재 라우트: ${route.settings.name}]""");
+
+    notifyListeners();
   }
 
   @override
@@ -59,6 +67,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     QcLog.i("""[Pop 정보 (route stack : $oldStack > ${routeStack.length})]
         현재 라우트: ${route.settings.name} 제거
         >>> [이전 라우트: ${previousRoute?.settings.name}] 노출 """);
+    notifyListeners();
   }
 
   @override
@@ -73,6 +82,7 @@ class AppNavigatorObserver extends NavigatorObserver {
     QcLog.i("""[Remove 정보 (route stack : $oldStack > ${routeStack.length})]
         현재 라우트: ${route.settings.name}
         >>> [이전 라우트: ${previousRoute?.settings.name}] """);
+    notifyListeners();
   }
 
   @override
@@ -92,9 +102,12 @@ class AppNavigatorObserver extends NavigatorObserver {
     QcLog.i("""[Replace 정보 (route stack : $oldStack > ${routeStack.length})]
       이전 라우트: ${oldRoute?.settings.name}
         >>> [현재 라우트: ${newRoute?.settings.name}]""");
+    notifyListeners();
   }
 
+  @override
   void dispose() {
+    super.dispose();
     QcLog.d('dispose navigatorObserverNotifier =============');
   }
 
@@ -103,7 +116,8 @@ class AppNavigatorObserver extends NavigatorObserver {
     // print("======= Current Navigator stack ======= ");
     for (var route in routeStack) {
       print('Route Name : ${route.settings.name}');
-      print('            isFirst: ${route.isFirst} /  isActive: ${route.isActive} /'
+      print(
+          '            isFirst: ${route.isFirst} /  isActive: ${route.isActive} /'
           ' isCurrent: ${route.isCurrent} /  overlayEntries: ${route.overlayEntries.length} /'
           'settings: ${route.settings.toString()} /'
           ' ');

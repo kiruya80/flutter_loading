@@ -25,3 +25,18 @@ samples, guidance on mobile development, and a full API reference.
 /// 변경사항이 생길 경우 자동으로 flutter_router.gr.dart 파일이 변경됩니다.
 ///
 /// 애니메이션 링크: [https://pub.dev/packages/auto_route#custom-route-transitions]
+
+# ChangeNotifier
+addListener
+    ChangeNotifier를 상속받은 클래스를 글로벌 변수(global variable)로 설정
+    위젯트리(widget tree)의 종속관계(dependency)에서 분리됨
+    사용하지 않을 경우 수동으로 dispose 해야 함
+Animated Builder
+    수동으로 setState를 호출하지 않아도 됨
+    수동으로 dispose 할 필요 없음
+    위젯트리(widget tree)의 종속관계(dependency)에서 분리됨
+Provider
+    pubspec.yaml 파일에 provider 추가해야 함
+    widget과 같이 사용되며, ChangeNotifier를 이용하는 위젯을 모두 포함하는 위젯을 감싸도록 설정함
+    ChangeNotifierProvider는 InheritedWidgets의 간소화 버전임
+    MultiProvider를 이용해서 복수의 Provider를 적용할 수 있음

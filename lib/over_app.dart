@@ -4,17 +4,17 @@ class OverApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: OverHomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class OverHomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _OverHomePageState createState() => _OverHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _OverHomePageState extends State<OverHomePage> {
   bool _isFirstOverlayOpen = false;
   bool _isSecondOverlayOpen = false;
 
@@ -124,5 +124,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 }

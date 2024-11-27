@@ -1,18 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:loading_dialog/util/print_log.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../loading_dialog.dart';
+import '../util/print_log.dart';
 import 'mixin/base_mixin.dart';
 
-///
-/// 생성일 : 2024. 11. 14.
-/// class 설명
-///
-///
-abstract class BaseState<T extends StatefulWidget> extends State<T>
-    with WidgetsBindingObserver, BaseMixin {
+abstract class BaseConsumerState<T extends ConsumerStatefulWidget>
+    extends ConsumerState<T> with WidgetsBindingObserver, BaseMixin {
   @override
   void initState() {
     super.initState();
@@ -33,9 +27,9 @@ abstract class BaseState<T extends StatefulWidget> extends State<T>
   // void didChangeDependencies() {
   //   super.didChangeDependencies();
   //   print(
-  //       '[$routeName] BaseState === didChangeDependencies 11 === ${context.mounted} ');
+  //       '[$routeName] BaseState === didChangeDependencies === ${context.mounted} ');
   // }
-  //
+
   // @override
   // void didUpdateWidget(covariant T oldWidget) {
   //   super.didUpdateWidget(oldWidget);

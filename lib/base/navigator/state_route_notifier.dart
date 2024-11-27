@@ -2,15 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loading_dialog/util/print_log.dart';
 
-import 'base_state.dart';
-import '../navigator/navigator_observer_notifier.dart';
+import '../../provider/app_current_route_notifier.dart';
+import '../../provider/app_route_stack_notifier.dart';
+import '../base_consumer_state.dart';
+import '../../navigator/riverpod/navigator_observer_notifier.dart';
 
 ///
 /// 생성일 : 2024. 11. 14.
 /// class 설명
 ///
 ///
-abstract class StateNavigator<T extends ConsumerStatefulWidget> extends BaseState<T> {
+abstract class StateRouteNotifier<T extends ConsumerStatefulWidget>
+    extends BaseConsumerState<T> {
   NavigatorObserverNotifier? navigatorObserver;
 
   List<Route> routeStack = [];
@@ -18,15 +21,21 @@ abstract class StateNavigator<T extends ConsumerStatefulWidget> extends BaseStat
   String tempRouteList = '';
 
   setNavigatorObserver() {
-    navigatorObserver = ref.watch(navigatorObserverNotifier);
+    var appCurrentRouteNotifier = ref.watch(appCurrentRouteNotifierProvider);
+    var appRouteStackNotifier = ref.watch(appRouteStackNotifierProvider);
     QcLog.d(
-        '[$routeName] currentRoute === ${navigatorObserver?.currentRoute?.settings.name} // ${navigatorObserver?.currentRoute}');
-    print('[$routeName] routeStack length =========  ${navigatorObserver?.routeStack.length}');
-    tempRouteList = '';
-    for (var item in navigatorObserver!.routeStack) {
-      print('[$routeName] routeStack ===  ${item.toString()}');
-      tempRouteList += item.settings.toString() + '\n';
-    }
+        'appCurrentRouteNotifier ==== ${appCurrentRouteNotifier?.settings.name}');
+    QcLog.d('appRouteStackNotifier ==== ${appRouteStackNotifier?.length}');
+
+    // navigatorObserver = ref.watch(navigatorObserverNotifier);
+    // QcLog.d(
+    //     '[$routeName] currentRoute === ${navigatorObserver?.currentRoute?.settings.name} // ${navigatorObserver?.currentRoute}');
+    // print('[$routeName] routeStack length =========  ${navigatorObserver?.routeStack.length}');
+    // tempRouteList = '';
+    // for (var item in navigatorObserver!.routeStack) {
+    //   print('[$routeName] routeStack ===  ${item.toString()}');
+    //   tempRouteList += item.settings.toString() + '\n';
+    // }
 
     setState(() {
       currentRoute = navigatorObserver?.currentRoute;
@@ -47,14 +56,15 @@ abstract class StateNavigator<T extends ConsumerStatefulWidget> extends BaseStat
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       routeName = ModalRoute.of(context)?.settings.name;
-      setNavigatorObserver();
+      // setNavigatorObserver();
     });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('[$routeName] BaseState === didChangeDependencies === ${context.mounted} ');
+    print(
+        '[$routeName] BaseState === didChangeDependencies === ${context.mounted} ');
   }
 
   @override

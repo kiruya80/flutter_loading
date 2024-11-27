@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loading_dialog/util/print_log.dart';
 
 ///
@@ -9,36 +8,23 @@ import 'package:loading_dialog/util/print_log.dart';
 ///
 /// route 옵져버
 ///
-/// 참고
-/// https://medium.com/@atefelsaid3/mastering-navigation-tracking-in-flutter-a-complete-guide-to-routeobserver-with-riverpod-ea23a12fb80c
 ///
-//   myObserver = (context.findAncestorWidgetOfExactType<MyApp>() as MyApp).myObserver;
-//
-//   /// 현재 패스
-//   myObserver?.currentRouteStream.listen((route) {
-//     QcLog.d('currentRouteStream ===== [${route?.settings.name}] , ');
-//     currentRoute = route;
-//   });
-//
-//   myObserver?.routeStackStream.listen((stackRoute) {
-//     QcLog.d('routeStackStream =====  [${stackRoute.length}] ');
-//     routeStack = stackRoute;
-//     int index = 0;
-//     for (var route in stackRoute) {
-//       print(
-//           'stackRoute $index ========= ${route.settings.name} , ${route.isActive} , ${route.isCurrent}');
-//       print('route info ================ ${route.toString()}');
-//       index++;
-//     }
-//   });
-class MyNavigatorObserver extends NavigatorObserver {
-  final List<Route> routeStack = [];
+///
+// 현재 활성화된 라우트 이름을 저장하는 StateProvider
+final currentRouteProvider = StateProvider<String?>((ref) => null);
 
-  Stream<List<Route>> get routeStackStream => _stackStreamController.stream;
-  final _stackStreamController = StreamController<List<Route>>.broadcast();
+final appNavigatorObserver = Provider<NavigatorObserver>((ref) {
+  QcLog.e('AppNavigatorObserver Provider === ');
+  return AppNavigatorObserver(ref as WidgetRef);
+});
 
-  Stream<Route?> get currentRouteStream => _streamController.stream;
-  final _streamController = StreamController<Route?>.broadcast();
+class AppNavigatorObserver extends NavigatorObserver {
+  final WidgetRef ref;
+
+  AppNavigatorObserver(this.ref);
+
+  List<Route> routeStack = [];
+  Route? currentRoute;
 
   @override
   void didPush(Route route, Route? previousRoute) {
@@ -46,11 +32,8 @@ class MyNavigatorObserver extends NavigatorObserver {
     int oldStack = routeStack.length;
 
     routeStack.add(route);
-    _stackStreamController.add(routeStack);
-    // _stackStreamController.add([route]);
-
+    currentRoute = route;
     _printStack();
-    _streamController.add(route);
     // final nowRoute = route.settings.name;
     // if (nowRoute != null) _streamController.add(nowRoute);
 
@@ -65,12 +48,9 @@ class MyNavigatorObserver extends NavigatorObserver {
     int oldStack = routeStack.length;
 
     routeStack.remove(route);
-    _stackStreamController.add(routeStack);
-    // _stackStreamController.add([route]);
-
+    currentRoute = route;
     _printStack();
 
-    _streamController.add(previousRoute);
     // _streamController.add(previousRoute?.settings.name ?? "/");
     QcLog.i("""[Pop 정보 (route stack : $oldStack > ${routeStack.length})]
         현재 라우트: ${route.settings.name} 제거
@@ -83,7 +63,7 @@ class MyNavigatorObserver extends NavigatorObserver {
     int oldStack = routeStack.length;
 
     routeStack.remove(route);
-    // _streamController.add(previousRoute);
+    currentRoute = previousRoute;
     _printStack();
 
     QcLog.i("""[Remove 정보 (route stack : $oldStack > ${routeStack.length})]
@@ -101,9 +81,8 @@ class MyNavigatorObserver extends NavigatorObserver {
     }
     if (newRoute != null) {
       routeStack.add(newRoute);
-      _streamController.add(newRoute);
+      currentRoute = newRoute;
     }
-    _stackStreamController.add(routeStack);
     _printStack();
 
     QcLog.i("""[Replace 정보 (route stack : $oldStack > ${routeStack.length})]
@@ -112,8 +91,7 @@ class MyNavigatorObserver extends NavigatorObserver {
   }
 
   void dispose() {
-    _streamController.close();
-    _stackStreamController.close();
+    QcLog.d('dispose navigatorObserverNotifier =============');
   }
 
   void _printStack() {
@@ -121,7 +99,8 @@ class MyNavigatorObserver extends NavigatorObserver {
     // print("======= Current Navigator stack ======= ");
     for (var route in routeStack) {
       print('Route Name : ${route.settings.name}');
-      print('            isFirst: ${route.isFirst} /  isActive: ${route.isActive} /'
+      print(
+          '            isFirst: ${route.isFirst} /  isActive: ${route.isActive} /'
           ' isCurrent: ${route.isCurrent} /  overlayEntries: ${route.overlayEntries.length} /'
           'settings: ${route.settings.toString()} /'
           ' ');
